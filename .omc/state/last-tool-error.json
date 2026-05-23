@@ -1,0 +1,7 @@
+{
+  "tool_name": "Bash",
+  "tool_input_preview": "{\"command\":\"ls \\\"/Users/deepak/Library/Application Support/Claude/local-agent-mode-sessions/182edecb-7876-4cd6-974c-5b87a3c90195/ee468f6a-df50-4fd3-8c07-07d65c37b553/rpm/plugin_014WxCYbLf7f3uw2isHFR9U...",
+  "error": "Exit code 1\nls: /Users/deepak/Library/Application Support/Claude/local-agent-mode-sessions/182edecb-7876-4cd6-974c-5b87a3c90195/ee468f6a-df50-4fd3-8c07-07d65c37b553/rpm/plugin_014WxCYbLf7f3uw2isHFR9US/skills/brainstorming/: No such file or directory",
+  "timestamp": "2026-05-23T16:26:03.862Z",
+  "retry_count": 1
+}

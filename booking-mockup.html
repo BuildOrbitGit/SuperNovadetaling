@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Booking System Mockup — Supernova</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Russo+One&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #020611;
+    --surface: #050d1e;
+    --surface2: #071223;
+    --cyan: #08d9ff;
+    --cyan-dim: rgba(8,217,255,0.15);
+    --cyan-border: rgba(8,217,255,0.22);
+    --gold: #c5a15a;
+    --white: #f0f4ff;
+    --muted: #7a8ba8;
+    --line: rgba(255,255,255,0.07);
+    --radius: 12px;
+    --font: 'Rajdhani', sans-serif;
+    --head: 'Russo One', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 17px;
+    min-height: 100vh;
+  }
+
+  /* ── TABS ── */
+  .tabs {
+    display: flex;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+    background: #030914;
+    padding: 0 32px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  .tab {
+    padding: 16px 24px;
+    font-family: var(--head);
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── BOOKING MODAL / SECTION ── */
+  .booking-section {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 48px 24px;
+  }
+
+  .booking-header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+  .booking-header .kicker {
+    font-family: var(--head);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 12px;
+  }
+  .booking-header h2 {
+    font-family: var(--head);
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
+    color: var(--white);
+    margin-bottom: 10px;
+  }
+  .booking-header p {
+    color: var(--muted);
+    font-size: 1.05rem;
+  }
+
+  /* ── PROGRESS STEPS ── */
+  .progress-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 40px;
+  }
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+    flex: 1;
+    max-width: 140px;
+  }
+  .step-dot {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--head);
+    font-size: 0.78rem;
+    color: var(--muted);
+    position: relative;
+    z-index: 1;
+    transition: all 0.3s;
+  }
+  .step.active .step-dot {
+    border-color: var(--cyan);
+    background: var(--cyan-dim);
+    color: var(--cyan);
+    box-shadow: 0 0 18px rgba(8,217,255,0.3);
+  }
+  .step.done .step-dot {
+    border-color: var(--cyan);
+    background: var(--cyan);
+    color: var(--bg);
+  }
+  .step-label {
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-align: center;
+  }
+  .step.active .step-label { color: var(--cyan); }
+  .step-line {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+    margin-bottom: 28px;
+    max-width: 60px;
+  }
+  .step.done + .step-line { background: var(--cyan); }
+
+  /* ── FORM CARD ── */
+  .form-card {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    overflow: hidden;
+  }
+
+  .form-section {
+    padding: 32px;
+    border-bottom: 1px solid var(--line);
+  }
+  .form-section:last-child { border-bottom: none; }
+
+  .section-title {
+    font-family: var(--head);
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .section-title::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--cyan-border);
+  }
+
+  .form-row { display: grid; gap: 16px; margin-bottom: 16px; }
+  .form-row.cols-2 { grid-template-columns: 1fr 1fr; }
+  .form-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .form-row:last-child { margin-bottom: 0; }
+
+  .field { display: flex; flex-direction: column; gap: 7px; }
+  .field label {
+    font-size: 0.78rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-family: var(--head);
+  }
+  .field label .req { color: var(--cyan); margin-left: 2px; }
+
+  .field input,
+  .field select,
+  .field textarea {
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    padding: 12px 16px;
+    color: var(--white);
+    font-family: var(--font);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus {
+    border-color: var(--cyan);
+    box-shadow: 0 0 0 3px rgba(8,217,255,0.1);
+  }
+  .field select {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a8ba8' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+  .field textarea { resize: vertical; min-height: 90px; }
+
+  /* ── CALENDAR ── */
+  .calendar-shell {
+    background: var(--surface2);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 24px;
+  }
+  .cal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  .cal-title {
+    font-family: var(--head);
+    font-size: 1rem;
+    letter-spacing: 0.06em;
+  }
+  .cal-nav {
+    display: flex;
+    gap: 8px;
+  }
+  .cal-nav button {
+    width: 32px; height: 32px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .cal-nav button:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .cal-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    text-align: center;
+  }
+  .cal-day-label {
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 0;
+    font-family: var(--head);
+  }
+  .cal-day {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    border-radius: 8px;
+    cursor: pointer;
+    color: var(--white);
+    transition: all 0.15s;
+    border: 1px solid transparent;
+  }
+  .cal-day:hover { background: var(--cyan-dim); border-color: var(--cyan-border); }
+  .cal-day.selected { background: var(--cyan); color: var(--bg); font-family: var(--head); }
+  .cal-day.today { border-color: var(--cyan-border); color: var(--cyan); }
+  .cal-day.empty, .cal-day.past { opacity: 0.2; cursor: default; pointer-events: none; }
+  .cal-day.booked { opacity: 0.35; cursor: not-allowed; text-decoration: line-through; }
+
+  /* ── TIME SLOTS ── */
+  .time-slots {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .time-slot {
+    padding: 10px 6px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    text-align: center;
+    font-size: 0.88rem;
+    font-family: var(--head);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    color: var(--muted);
+    background: var(--surface2);
+    transition: all 0.15s;
+  }
+  .time-slot:hover { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+  .time-slot.selected { background: var(--cyan); color: var(--bg); border-color: var(--cyan); }
+  .time-slot.unavailable { opacity: 0.25; cursor: not-allowed; text-decoration: line-through; }
+
+  /* ── SERVICE CARDS ── */
+  .service-options {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .service-option {
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 18px 16px;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface2);
+    position: relative;
+  }
+  .service-option:hover { border-color: var(--cyan-border); }
+  .service-option.selected {
+    border-color: var(--cyan);
+    background: var(--cyan-dim);
+    box-shadow: 0 0 20px rgba(8,217,255,0.12);
+  }
+  .service-option .check {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    border: 1.5px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.7rem;
+    color: transparent;
+    transition: all 0.2s;
+  }
+  .service-option.selected .check {
+    background: var(--cyan);
+    border-color: var(--cyan);
+    color: var(--bg);
+  }
+  .service-tag {
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold);
+    font-family: var(--head);
+    margin-bottom: 6px;
+  }
+  .service-option h4 { font-family: var(--head); font-size: 0.95rem; margin-bottom: 4px; }
+  .service-option .price { color: var(--cyan); font-size: 0.82rem; font-family: var(--head); }
+  .service-option p { color: var(--muted); font-size: 0.8rem; margin-top: 6px; line-height: 1.4; }
+
+  /* ── ADDON CHIPS ── */
+  .addon-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 12px;
+  }
+  .addon-chip {
+    padding: 8px 16px;
+    border: 1px solid var(--line);
+    border-radius: 40px;
+    font-size: 0.82rem;
+    font-family: var(--head);
+    letter-spacing: 0.08em;
+    cursor: pointer;
+    color: var(--muted);
+    transition: all 0.15s;
+  }
+  .addon-chip:hover { border-color: var(--cyan-border); color: var(--white); }
+  .addon-chip.selected { border-color: var(--cyan); color: var(--cyan); background: var(--cyan-dim); }
+  .addon-chip .chip-price { color: var(--gold); margin-left: 6px; font-size: 0.75rem; }
+
+  /* ── PHOTO UPLOAD ── */
+  .upload-zone {
+    border: 1.5px dashed rgba(8,217,255,0.25);
+    border-radius: 12px;
+    padding: 28px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--surface2);
+  }
+  .upload-zone:hover { border-color: var(--cyan); background: var(--cyan-dim); }
+  .upload-icon { font-size: 2rem; margin-bottom: 10px; opacity: 0.6; }
+  .upload-zone h4 { font-family: var(--head); font-size: 0.95rem; margin-bottom: 4px; }
+  .upload-zone p { color: var(--muted); font-size: 0.82rem; }
+  .upload-preview {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-top: 14px;
+  }
+  .upload-thumb {
+    width: 80px; height: 80px;
+    border-radius: 8px;
+    border: 1px solid var(--cyan-border);
+    background: var(--surface2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.65rem;
+    color: var(--muted);
+    position: relative;
+    overflow: hidden;
+  }
+  .upload-thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .upload-thumb .remove {
+    position: absolute;
+    top: 4px; right: 4px;
+    background: rgba(2,6,17,0.8);
+    border-radius: 50%;
+    width: 18px; height: 18px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.6rem;
+    cursor: pointer;
+    color: var(--white);
+  }
+
+  /* ── SUMMARY ── */
+  .summary-card {
+    background: var(--surface2);
+    border: 1px solid var(--cyan-border);
+    border-radius: 14px;
+    padding: 24px;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 0.95rem;
+  }
+  .summary-row:last-child { border-bottom: none; padding-bottom: 0; }
+  .summary-row .label { color: var(--muted); }
+  .summary-row .value { text-align: right; font-weight: 600; }
+  .summary-total { color: var(--cyan); font-family: var(--head); font-size: 1.1rem; }
+
+  /* ── SUBMIT BUTTON ── */
+  .submit-row {
+    padding: 24px 32px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: flex-end;
+    border-top: 1px solid var(--line);
+    background: rgba(5,13,30,0.6);
+  }
+  .btn-back {
+    padding: 14px 28px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--muted);
+    font-family: var(--head);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: var(--line); color: var(--white); }
+  .btn-next {
+    padding: 14px 36px;
+    background: var(--cyan);
+    border: none;
+    border-radius: 8px;
+    color: var(--bg);
+    font-family: var(--head);
+    font-size: 0.78rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.2s;
+    clip-path: polygon(8px 0%, 100% 0%, calc(100% - 8px) 100%, 0% 100%);
+  }
+  .btn-next:hover { background: #40e8ff; }
+
+  /* ── OWNER EMAIL MOCKUP ── */
+  .email-mockup {
+    max-width: 620px;
+    margin: 48px auto;
+    background: #0f1622;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--line);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  .email-topbar {
+    background: #030914;
+    padding: 12px 20px;
+    font-size: 0.75rem;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .email-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .email-header {
+    background: linear-gradient(135deg, #030914, #071223);
+    padding: 32px;
+    text-align: center;
+    border-bottom: 1px solid var(--cyan-border);
+  }
+  .email-logo {
+    font-family: var(--head);
+    color: var(--cyan);
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+  .email-body { padding: 28px 32px; }
+  .email-body h3 { font-size: 1.2rem; margin-bottom: 16px; color: var(--white); }
+  .email-body p { color: #b0bec5; font-size: 0.9rem; line-height: 1.6; margin-bottom: 16px; }
+  .email-detail-grid {
+    background: #070e1d;
+    border-radius: 10px;
+    padding: 18px;
+    margin-bottom: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .email-detail { }
+  .email-detail .label { font-size: 0.68rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.12em; margin-bottom: 3px; }
+  .email-detail .value { font-size: 0.9rem; color: var(--white); font-weight: 600; }
+  .email-photos {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+  .email-photo {
+    width: 90px; height: 70px;
+    border-radius: 8px;
+    background: #0d1829;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.4rem;
+    color: var(--muted);
+  }
+  .email-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .email-btn-confirm {
+    padding: 14px;
+    background: var(--cyan);
+    border: none;
+    border-radius: 8px;
+    color: #020611;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .email-btn-decline {
+    padding: 14px;
+    background: transparent;
+    border: 1px solid rgba(255,80,80,0.35);
+    border-radius: 8px;
+    color: #ff6b6b;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+  }
+  .email-footer {
+    padding: 18px 32px;
+    border-top: 1px solid var(--line);
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  /* ── SUCCESS ── */
+  .success-view {
+    max-width: 520px;
+    margin: 80px auto;
+    text-align: center;
+    padding: 24px;
+  }
+  .success-icon {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: var(--cyan-dim);
+    border: 2px solid var(--cyan);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    margin: 0 auto 24px;
+    box-shadow: 0 0 40px rgba(8,217,255,0.2);
+  }
+  .success-view h2 { font-family: var(--head); font-size: 1.8rem; margin-bottom: 12px; }
+  .success-view p { color: var(--muted); line-height: 1.6; margin-bottom: 8px; }
+
+  @media (max-width: 640px) {
+    .form-row.cols-2, .form-row.cols-3 { grid-template-columns: 1fr; }
+    .service-options { grid-template-columns: 1fr; }
+    .time-slots { grid-template-columns: repeat(3, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <div class="tab active" onclick="showView('booking')">Booking Form</div>
+  <div class="tab" onclick="showView('email')">Owner Email</div>
+  <div class="tab" onclick="showView('success')">Client Confirmation</div>
+</div>
+
+<!-- ═══ VIEW: BOOKING FORM ═══ -->
+<div class="view active" id="view-booking">
+  <div class="booking-section">
+
+    <div class="booking-header">
+      <p class="kicker">Mobile Detailing — Kelowna BC</p>
+      <h2>Book Your Detail</h2>
+      <p>We come to you — fill in the details below and we'll confirm within a few hours.</p>
+    </div>
+
+    <!-- Steps -->
+    <div class="progress-steps">
+      <div class="step done">
+        <div class="step-dot">✓</div>
+        <span class="step-label">Date & Time</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step active">
+        <div class="step-dot">2</div>
+        <span class="step-label">Your Car</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-dot">3</div>
+        <span class="step-label">Service</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-dot">4</div>
+        <span class="step-label">Contact</span>
+      </div>
+    </div>
+
+    <div class="form-card">
+
+      <!-- Step 1: Date & Time -->
+      <div class="form-section">
+        <div class="section-title">Pick a Date</div>
+        <div class="calendar-shell">
+          <div class="cal-header">
+            <div class="cal-title">June 2025</div>
+            <div class="cal-nav">
+              <button>‹</button>
+              <button>›</button>
+            </div>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-day-label">Sun</div>
+            <div class="cal-day-label">Mon</div>
+            <div class="cal-day-label">Tue</div>
+            <div class="cal-day-label">Wed</div>
+            <div class="cal-day-label">Thu</div>
+            <div class="cal-day-label">Fri</div>
+            <div class="cal-day-label">Sat</div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day empty"></div>
+            <div class="cal-day past">1</div>
+            <div class="cal-day past">2</div>
+            <div class="cal-day past">3</div>
+            <div class="cal-day past">4</div>
+            <div class="cal-day past">5</div>
+            <div class="cal-day past">6</div>
+            <div class="cal-day past">7</div>
+            <div class="cal-day past">8</div>
+            <div class="cal-day past">9</div>
+            <div class="cal-day past">10</div>
+            <div class="cal-day past">11</div>
+            <div class="cal-day past">12</div>
+            <div class="cal-day past">13</div>
+            <div class="cal-day past">14</div>
+            <div class="cal-day past">15</div>
+            <div class="cal-day past">16</div>
+            <div class="cal-day past">17</div>
+            <div class="cal-day past">18</div>
+            <div class="cal-day past">19</div>
+            <div class="cal-day past">20</div>
+            <div class="cal-day past">21</div>
+            <div class="cal-day today" onclick="selectDay(this)">22</div>
+            <div class="cal-day booked">23</div>
+            <div class="cal-day" onclick="selectDay(this)">24</div>
+            <div class="cal-day selected" onclick="selectDay(this)">25</div>
+            <div class="cal-day" onclick="selectDay(this)">26</div>
+            <div class="cal-day booked">27</div>
+            <div class="cal-day" onclick="selectDay(this)">28</div>
+            <div class="cal-day" onclick="selectDay(this)">29</div>
+            <div class="cal-day" onclick="selectDay(this)">30</div>
+          </div>
+
+          <div style="margin-top:20px;">
+            <div class="section-title" style="font-size:0.65rem;">Available Times — June 25</div>
+            <div class="time-slots">
+              <div class="time-slot" onclick="selectSlot(this)">8:00 AM</div>
+              <div class="time-slot" onclick="selectSlot(this)">9:30 AM</div>
+              <div class="time-slot selected" onclick="selectSlot(this)">11:00 AM</div>
+              <div class="time-slot unavailable">12:30 PM</div>
+              <div class="time-slot" onclick="selectSlot(this)">2:00 PM</div>
+              <div class="time-slot" onclick="selectSlot(this)">3:30 PM</div>
+              <div class="time-slot unavailable">5:00 PM</div>
+              <div class="time-slot" onclick="selectSlot(this)">6:00 PM</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2: Car Details -->
+      <div class="form-section">
+        <div class="section-title">Your Vehicle</div>
+        <div class="form-row cols-3">
+          <div class="field">
+            <label>Make <span class="req">*</span></label>
+            <select>
+              <option>Toyota</option>
+              <option>Honda</option>
+              <option selected>BMW</option>
+              <option>Mercedes</option>
+              <option>Ford</option>
+              <option>Chevrolet</option>
+              <option>Audi</option>
+              <option>Porsche</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Model <span class="req">*</span></label>
+            <select>
+              <option>3 Series</option>
+              <option selected>5 Series</option>
+              <option>X5</option>
+              <option>M3</option>
+              <option>M4</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Year <span class="req">*</span></label>
+            <select>
+              <option>2025</option>
+              <option selected>2024</option>
+              <option>2023</option>
+              <option>2022</option>
+              <option>2021</option>
+              <option>2020</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row cols-2">
+          <div class="field">
+            <label>Colour</label>
+            <input type="text" placeholder="e.g. Alpine White" value="Alpine White">
+          </div>
+          <div class="field">
+            <label>Vehicle Type <span class="req">*</span></label>
+            <select>
+              <option>Car / Sedan</option>
+              <option selected>SUV / Crossover</option>
+              <option>Truck</option>
+              <option>Van / Minivan</option>
+              <option>Sports Car</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 3: Service -->
+      <div class="form-section">
+        <div class="section-title">Choose Your Package</div>
+        <div class="service-options">
+          <div class="service-option" onclick="selectService(this)">
+            <span class="check">✓</span>
+            <div class="service-tag">01 — Cosmic Express</div>
+            <h4>Basic Maintenance</h4>
+            <div class="price">From $99 / $139 SUV</div>
+            <p>Wash, wheels, windows, light interior wipe</p>
+          </div>
+          <div class="service-option selected" onclick="selectService(this)">
+            <span class="check">✓</span>
+            <div class="service-tag">02 — Lunar Detail</div>
+            <h4>Deep Clean</h4>
+            <div class="price">From $159 / $199 SUV</div>
+            <p>Deep interior, steam clean, spray wax, UV protectant</p>
+          </div>
+          <div class="service-option" onclick="selectService(this)">
+            <span class="check">✓</span>
+            <div class="service-tag">03 — Supernova Detail</div>
+            <h4>Premium Restoration</h4>
+            <div class="price">From $199 / $239 SUV</div>
+            <p>Shampoo, clay bar, paint sealant, trim restoration</p>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <div class="section-title" style="font-size:0.65rem; margin-bottom:10px;">Add-Ons</div>
+          <div class="addon-chips">
+            <div class="addon-chip selected" onclick="this.classList.toggle('selected')">Engine Bay Detail <span class="chip-price">+$50</span></div>
+            <div class="addon-chip" onclick="this.classList.toggle('selected')">Headlight Restoration <span class="chip-price">+$60–$100</span></div>
+            <div class="addon-chip selected" onclick="this.classList.toggle('selected')">Pet Hair Removal <span class="chip-price">+$40–$100</span></div>
+            <div class="addon-chip" onclick="this.classList.toggle('selected')">Odor Elimination <span class="chip-price">+$50</span></div>
+            <div class="addon-chip" onclick="this.classList.toggle('selected')">Ceramic Spray Sealant <span class="chip-price">+$80</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 4: Contact + Location + Photos -->
+      <div class="form-section">
+        <div class="section-title">Your Details</div>
+        <div class="form-row cols-2">
+          <div class="field">
+            <label>Full Name <span class="req">*</span></label>
+            <input type="text" value="Alex Thornton">
+          </div>
+          <div class="field">
+            <label>Phone Number <span class="req">*</span></label>
+            <input type="tel" value="(250) 555-0182">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Email Address <span class="req">*</span></label>
+            <input type="email" value="alex.thornton@example.com">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label>Service Address <span class="req">*</span></label>
+            <input type="text" placeholder="Where should we come? (home, office, etc.)" value="142 Lakeshore Rd, Kelowna, BC">
+          </div>
+        </div>
+
+        <div style="margin-top: 20px;">
+          <div class="section-title" style="font-size:0.65rem; margin-bottom:10px;">Upload Photos of Your Vehicle</div>
+          <div class="upload-zone">
+            <div class="upload-icon">📷</div>
+            <h4>Drag & drop or tap to upload</h4>
+            <p>Show us the current condition — helps us prepare and give an accurate quote<br><span style="opacity:0.6">JPG, PNG or HEIC · Max 10MB per photo · Up to 8 photos</span></p>
+          </div>
+          <div class="upload-preview">
+            <div class="upload-thumb" style="background:#0a1525; border-color: rgba(8,217,255,0.3);">
+              <div style="font-size:1.4rem;">🚗</div>
+              <div class="remove">×</div>
+            </div>
+            <div class="upload-thumb" style="background:#0a1525; border-color: rgba(8,217,255,0.3);">
+              <div style="font-size:1.4rem;">🪑</div>
+              <div class="remove">×</div>
+            </div>
+            <div class="upload-thumb" style="border: 1px dashed rgba(8,217,255,0.2); background: transparent; cursor:pointer; color: rgba(8,217,255,0.4);">+</div>
+          </div>
+        </div>
+
+        <div class="form-row" style="margin-top: 20px;">
+          <div class="field">
+            <label>Condition Notes / Special Requests</label>
+            <textarea placeholder="e.g. heavy pet hair in back seats, some bird droppings on hood, need it done before 3pm...">Heavy pet hair throughout, slight coffee stain on passenger seat. Please avoid using strong scents.</textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- Summary -->
+      <div class="form-section">
+        <div class="section-title">Booking Summary</div>
+        <div class="summary-card">
+          <div class="summary-row">
+            <span class="label">Date & Time</span>
+            <span class="value">June 25, 2025 · 11:00 AM</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Location</span>
+            <span class="value">142 Lakeshore Rd, Kelowna</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Vehicle</span>
+            <span class="value">2024 BMW 5 Series · Alpine White</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Package</span>
+            <span class="value">Lunar Detail (SUV/Truck) · $199</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Add-Ons</span>
+            <span class="value">Engine Bay (+$50) · Pet Hair (+$40)</span>
+          </div>
+          <div class="summary-row">
+            <span class="label">Estimated Total</span>
+            <span class="value summary-total">~$289</span>
+          </div>
+        </div>
+        <p style="color:var(--muted); font-size:0.8rem; margin-top:12px;">* Estimate only — final price confirmed by owner. No payment taken online.</p>
+      </div>
+
+      <div class="submit-row">
+        <button class="btn-back">← Back</button>
+        <button class="btn-next">Send Booking Request →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW: OWNER EMAIL ═══ -->
+<div class="view" id="view-email">
+  <div style="padding: 40px 24px;">
+    <p style="text-align:center; color:var(--muted); font-size:0.82rem; margin-bottom:24px; font-family: var(--head); letter-spacing:0.1em; text-transform:uppercase;">Owner inbox — new booking request email</p>
+    <div class="email-mockup">
+      <div class="email-topbar">
+        <div class="email-dot" style="background:#ff5f57"></div>
+        <div class="email-dot" style="background:#ffbd2e"></div>
+        <div class="email-dot" style="background:#28c840"></div>
+        &nbsp; New Booking Request — Supernova Detailing
+      </div>
+      <div class="email-header">
+        <div class="email-logo">⭐ SUPERNOVA DETAILING</div>
+        <div style="color: var(--muted); font-size:0.78rem; margin-top:4px;">New booking request received</div>
+      </div>
+      <div class="email-body">
+        <h3>New Booking Request 🚗</h3>
+        <p>Someone just requested a detailing appointment. Review the details below and confirm or decline — the customer is waiting to hear back.</p>
+
+        <div class="email-detail-grid">
+          <div class="email-detail">
+            <div class="label">Customer</div>
+            <div class="value">Alex Thornton</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Phone</div>
+            <div class="value">(250) 555-0182</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Date & Time</div>
+            <div class="value">June 25 · 11:00 AM</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Location</div>
+            <div class="value">142 Lakeshore Rd</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Vehicle</div>
+            <div class="value">2024 BMW 5 Series</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Package</div>
+            <div class="value">Lunar Detail + Engine Bay + Pet Hair</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Est. Total</div>
+            <div class="value" style="color:var(--cyan);">~$289</div>
+          </div>
+          <div class="email-detail">
+            <div class="label">Notes</div>
+            <div class="value" style="font-weight:400; font-size:0.8rem; color:#b0bec5;">Heavy pet hair, coffee stain on seat</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:14px;">
+          <div style="font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); margin-bottom:8px;">Customer Photos</div>
+          <div class="email-photos">
+            <div class="email-photo">🚗</div>
+            <div class="email-photo">🪑</div>
+            <div class="email-photo" style="opacity:0.4; border-style:dashed;">+6</div>
+          </div>
+        </div>
+
+        <div class="email-actions">
+          <div class="email-btn-confirm">✓ Confirm Booking</div>
+          <div class="email-btn-decline">✗ Decline / Reschedule</div>
+        </div>
+      </div>
+      <div class="email-footer">
+        Supernova Automobile Detailing · Kelowna, BC · 604-728-3247<br>
+        <span style="opacity:0.5">This email was sent from your booking system</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ VIEW: CLIENT CONFIRMATION ═══ -->
+<div class="view" id="view-success">
+  <div class="success-view">
+    <div class="success-icon">✓</div>
+    <h2>You're Booked!</h2>
+    <p style="color:var(--cyan); font-family:var(--head); font-size:0.85rem; letter-spacing:0.1em; text-transform:uppercase; margin-bottom:16px;">Booking Confirmed</p>
+    <p>Your detailing appointment has been confirmed by Supernova. A calendar invite has been sent to <strong>alex.thornton@example.com</strong> and added to their schedule.</p>
+    <p style="margin-top:12px; color:var(--muted);">Questions? Text or call <a href="tel:6047283247" style="color:var(--cyan);">604-728-3247</a></p>
+
+    <div class="summary-card" style="margin-top:32px; text-align:left;">
+      <div class="summary-row">
+        <span class="label">Date & Time</span>
+        <span class="value">June 25, 2025 · 11:00 AM</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Location</span>
+        <span class="value">142 Lakeshore Rd, Kelowna</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Package</span>
+        <span class="value">Lunar Detail + Add-Ons</span>
+      </div>
+      <div class="summary-row">
+        <span class="label">Estimated Total</span>
+        <span class="value summary-total">~$289</span>
+      </div>
+    </div>
+
+    <p style="margin-top:24px; font-size:0.8rem; color:var(--muted);">📅 A calendar invite (.ics) has been sent to your email — click it to add to Google, Apple, or Outlook Calendar.</p>
+  </div>
+</div>
+
+<script>
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  event.target.classList.add('active');
+}
+function selectDay(el) {
+  document.querySelectorAll('.cal-day.selected').forEach(d => d.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectSlot(el) {
+  document.querySelectorAll('.time-slot.selected').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+function selectService(el) {
+  document.querySelectorAll('.service-option.selected').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+}
+</script>
+</body>
+</html>

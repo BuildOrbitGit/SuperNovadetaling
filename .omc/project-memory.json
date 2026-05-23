@@ -1,0 +1,104 @@
+{
+  "version": "1.0.0",
+  "lastScanned": 1779552356782,
+  "projectRoot": "/Users/deepak/BuildOrbit/SuperNovadetaling",
+  "techStack": {
+    "languages": [],
+    "frameworks": [],
+    "packageManager": null,
+    "runtime": null
+  },
+  "build": {
+    "buildCommand": null,
+    "testCommand": null,
+    "lintCommand": null,
+    "devCommand": null,
+    "scripts": {}
+  },
+  "conventions": {
+    "namingStyle": null,
+    "importStyle": null,
+    "testPattern": null,
+    "fileOrganization": null
+  },
+  "structure": {
+    "isMonorepo": false,
+    "workspaces": [],
+    "mainDirectories": [],
+    "gitBranches": {
+      "defaultBranch": "main",
+      "branchingStrategy": null
+    }
+  },
+  "customNotes": [],
+  "directoryMap": {},
+  "hotPaths": [
+    {
+      "path": "style.css",
+      "accessCount": 15,
+      "lastAccessed": 1779556016387,
+      "type": "file"
+    },
+    {
+      "path": "script.js",
+      "accessCount": 11,
+      "lastAccessed": 1779555986449,
+      "type": "file"
+    },
+    {
+      "path": "index.html",
+      "accessCount": 8,
+      "lastAccessed": 1779555968186,
+      "type": "file"
+    },
+    {
+      "path": "README.md",
+      "accessCount": 3,
+      "lastAccessed": 1779556392635,
+      "type": "file"
+    },
+    {
+      "path": "vercel.json",
+      "accessCount": 1,
+      "lastAccessed": 1779552579693,
+      "type": "file"
+    },
+    {
+      "path": "booking-mockup.html",
+      "accessCount": 1,
+      "lastAccessed": 1779553893220,
+      "type": "file"
+    },
+    {
+      "path": "package.json",
+      "accessCount": 1,
+      "lastAccessed": 1779554334085,
+      "type": "file"
+    },
+    {
+      "path": ".env.example",
+      "accessCount": 1,
+      "lastAccessed": 1779554340115,
+      "type": "file"
+    },
+    {
+      "path": "api/book.js",
+      "accessCount": 1,
+      "lastAccessed": 1779554375483,
+      "type": "file"
+    },
+    {
+      "path": "api/confirm.js",
+      "accessCount": 1,
+      "lastAccessed": 1779554412989,
+      "type": "file"
+    },
+    {
+      "path": "api/decline.js",
+      "accessCount": 1,
+      "lastAccessed": 1779554426220,
+      "type": "file"
+    }
+  ],
+  "userDirectives": []
+}
