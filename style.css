@@ -740,6 +740,11 @@ h3 {
   to   { opacity: 0;   transform: translateX(140%) skewX(-14deg); }
 }
 
+@keyframes frame-pulse {
+  0%, 100% { box-shadow: var(--shadow), 0 0 0 1px rgba(197, 161, 90, 0.08); }
+  50%       { box-shadow: var(--shadow), 0 0 0 1px rgba(8, 217, 255, 0.28), 0 0 28px rgba(8, 217, 255, 0.1); }
+}
+
 .comparison-frame.wipe-done::after {
   content: '';
   position: absolute;
@@ -748,6 +753,36 @@ h3 {
   animation: shine-sweep 0.75s ease-out forwards;
   pointer-events: none;
   z-index: 4;
+}
+
+.comparison-frame.wipe-done {
+  animation: frame-pulse 2.6s ease-in-out infinite;
+}
+
+.replay-hint {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%) translateY(10px);
+  background: rgba(5, 12, 23, 0.85);
+  border: 1px solid rgba(8, 217, 255, 0.32);
+  color: var(--cyan);
+  font-family: "Russo One", Arial, sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 6px 16px;
+  border-radius: 40px;
+  opacity: 0;
+  transition: opacity 0.5s ease 0.3s, transform 0.5s ease 0.3s;
+  pointer-events: none;
+  z-index: 5;
+  white-space: nowrap;
+}
+
+.wipe-done .replay-hint {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
 }
 
 .image-label {

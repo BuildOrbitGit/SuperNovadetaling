@@ -211,9 +211,13 @@ function setupComparisonWipe() {
   }, { threshold: 0.45 });
 
   frames.forEach((frame) => {
+    const hint = document.createElement("span");
+    hint.className = "replay-hint";
+    hint.textContent = "↺ tap to replay";
+    frame.appendChild(hint);
+
     observer.observe(frame);
     frame.style.cursor = "pointer";
-    frame.title = "Click to replay";
     frame.addEventListener("click", () => playWipe(frame));
   });
 }
