@@ -41,7 +41,7 @@
         <a href="#contact">Contact</a>
       </div>
 
-      <a class="angle-button nav-book" href="sms:6047283247">Book Now</a>
+      <a class="angle-button nav-book" href="#book" data-open-booking>Book Now</a>
     </nav>
   </header>
 
@@ -54,7 +54,7 @@
         <h1 class="reveal">Supernova Automobile Detailing</h1>
         <p class="hero-subtitle reveal">Premium mobile car detailing in Kelowna, BC - we bring the shine to you.</p>
         <div class="button-row reveal">
-          <a class="angle-button" href="sms:6047283247">Text to Book</a>
+          <a class="angle-button" href="#book" data-open-booking>Text to Book</a>
           <a class="ghost-button" href="tel:6047283247">Call Now</a>
         </div>
       </div>
@@ -294,7 +294,7 @@
         <h2>Ready for a Supernova-Level Detail?</h2>
         <p class="lead">Book your mobile detailing appointment in Kelowna today.</p>
         <div class="button-row">
-          <a class="angle-button" href="sms:6047283247">Text to Book</a>
+          <a class="angle-button" href="#book" data-open-booking>Text to Book</a>
           <a class="ghost-button" href="tel:6047283247">Call Now</a>
         </div>
       </div>
@@ -310,5 +310,193 @@
       <p>Mobile car detailing Kelowna BC | Text or call <a href="tel:6047283247">604-728-3247</a></p>
     </div>
   </footer>
+
+  <!-- ══ BOOKING MODAL ══════════════════════════════════════════ -->
+  <div class="bk-modal" id="bookingModal" aria-modal="true" role="dialog" aria-labelledby="bkModalTitle" hidden>
+    <div class="bk-overlay" data-booking-close aria-hidden="true"></div>
+    <div class="bk-panel">
+
+      <div class="bk-header">
+        <div class="bk-header-brand">
+          <img src="supernova-logo-transparent.png" alt="Supernova" width="34" height="34">
+          <span id="bkModalTitle">Book a Detail</span>
+        </div>
+        <button class="bk-close" data-booking-close aria-label="Close booking form">
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="1" y1="1" x2="13" y2="13"/><line x1="13" y1="1" x2="1" y2="13"/></svg>
+        </button>
+      </div>
+
+      <div class="bk-progress-wrap" aria-hidden="true">
+        <div class="bk-progress-bar" id="bkProgressBar"></div>
+      </div>
+
+      <div class="bk-steps-nav" aria-hidden="true">
+        <div class="bk-step-ind" data-bk-ind="1"><div class="bk-ind-dot">1</div><span>Date</span></div>
+        <div class="bk-step-ind" data-bk-ind="2"><div class="bk-ind-dot">2</div><span>Vehicle</span></div>
+        <div class="bk-step-ind" data-bk-ind="3"><div class="bk-ind-dot">3</div><span>Service</span></div>
+        <div class="bk-step-ind" data-bk-ind="4"><div class="bk-ind-dot">4</div><span>Details</span></div>
+        <div class="bk-step-ind" data-bk-ind="5"><div class="bk-ind-dot">5</div><span>Review</span></div>
+      </div>
+
+      <div class="bk-body" id="bkBody">
+
+        <!-- STEP 1: DATE & TIME -->
+        <div class="bk-step" data-bk-step="1">
+          <h2 class="bk-step-title">When should we come?</h2>
+          <div class="bk-cal-wrap" data-bk-calendar></div>
+          <div class="bk-slots-wrap" data-bk-slots-wrap hidden>
+            <p class="bk-slots-label">Available times — <strong data-bk-date-label></strong></p>
+            <div class="bk-slots-grid" data-bk-slots-grid></div>
+          </div>
+        </div>
+
+        <!-- STEP 2: VEHICLE -->
+        <div class="bk-step" data-bk-step="2" hidden>
+          <h2 class="bk-step-title">Tell us about your vehicle</h2>
+          <div class="bk-form-grid">
+            <div class="bk-field" data-bk-field="make">
+              <label for="bkMake">Make <span class="bk-req">*</span></label>
+              <select id="bkMake" name="make" required><option value="">Select make…</option></select>
+            </div>
+            <div class="bk-field" data-bk-field="model">
+              <label for="bkModel">Model <span class="bk-req">*</span></label>
+              <select id="bkModel" name="model" required disabled><option value="">Select make first</option></select>
+            </div>
+            <div class="bk-field" data-bk-field="year">
+              <label for="bkYear">Year <span class="bk-req">*</span></label>
+              <select id="bkYear" name="year" required><option value="">Select year…</option></select>
+            </div>
+            <div class="bk-field" data-bk-field="color">
+              <label for="bkColor">Colour</label>
+              <input type="text" id="bkColor" name="color" placeholder="e.g. Midnight Black" autocomplete="off">
+            </div>
+          </div>
+          <div class="bk-field bk-field--full" style="margin-top:16px">
+            <label>Vehicle type <span class="bk-req">*</span></label>
+            <div class="bk-type-grid">
+              <label class="bk-type-opt"><input type="radio" name="vehicleType" value="Car / Sedan" checked><span>🚗 Car / Sedan</span></label>
+              <label class="bk-type-opt"><input type="radio" name="vehicleType" value="SUV / Crossover"><span>🚙 SUV / Crossover</span></label>
+              <label class="bk-type-opt"><input type="radio" name="vehicleType" value="Truck"><span>🛻 Truck</span></label>
+              <label class="bk-type-opt"><input type="radio" name="vehicleType" value="Van / Minivan"><span>🚐 Van</span></label>
+              <label class="bk-type-opt"><input type="radio" name="vehicleType" value="Sports Car"><span>🏎 Sports Car</span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 3: SERVICE -->
+        <div class="bk-step" data-bk-step="3" hidden>
+          <h2 class="bk-step-title">Choose your package</h2>
+          <div class="bk-packages">
+            <label class="bk-pkg">
+              <input type="radio" name="service" value="Cosmic Express — Basic Maintenance">
+              <div class="bk-pkg-card">
+                <div class="bk-pkg-top"><span class="bk-pkg-num">01</span><span class="bk-pkg-code">Cosmic Express</span></div>
+                <h3>Basic Maintenance</h3>
+                <p class="bk-pkg-price">Cars $99 · SUV/Truck $139</p>
+                <ul><li>Exterior hand wash & dry</li><li>Wheel & tire cleaning + shine</li><li>Interior wipe-down & windows</li><li>Light vacuum</li></ul>
+                <div class="bk-pkg-check" aria-hidden="true">✓</div>
+              </div>
+            </label>
+            <label class="bk-pkg">
+              <input type="radio" name="service" value="Lunar Detail — Deep Clean" checked>
+              <div class="bk-pkg-card bk-pkg-featured">
+                <div class="bk-pkg-top"><span class="bk-pkg-num">02</span><span class="bk-pkg-code">Lunar Detail</span></div>
+                <h3>Deep Clean</h3>
+                <p class="bk-pkg-popular">Most Popular</p>
+                <p class="bk-pkg-price">Cars $159 · SUV/Truck $199</p>
+                <ul><li>Everything in Cosmic Express</li><li>Deep vacuum + crevice brush</li><li>Light steam cleaning</li><li>Spray wax + UV protectant</li></ul>
+                <div class="bk-pkg-check" aria-hidden="true">✓</div>
+              </div>
+            </label>
+            <label class="bk-pkg">
+              <input type="radio" name="service" value="Supernova Detail — Premium Restoration">
+              <div class="bk-pkg-card">
+                <div class="bk-pkg-top"><span class="bk-pkg-num">03</span><span class="bk-pkg-code">Supernova Detail</span></div>
+                <h3>Premium Restoration</h3>
+                <p class="bk-pkg-price">Cars $199 · SUV/Truck $239</p>
+                <ul><li>Everything in Lunar Detail</li><li>Carpet & seat shampoo</li><li>Clay bar + paint sealant</li><li>Trim restoration</li></ul>
+                <div class="bk-pkg-check" aria-hidden="true">✓</div>
+              </div>
+            </label>
+          </div>
+          <div class="bk-addons">
+            <p class="bk-addons-title">Add-Ons <span>(optional)</span></p>
+            <div class="bk-addons-grid">
+              <label class="bk-addon"><input type="checkbox" name="addon" value="Engine Bay Detail (+$50)"><span>Engine Bay Detail <em>+$50</em></span></label>
+              <label class="bk-addon"><input type="checkbox" name="addon" value="Headlight Restoration (+$60–$100)"><span>Headlight Restoration <em>+$60–$100</em></span></label>
+              <label class="bk-addon"><input type="checkbox" name="addon" value="Pet Hair Removal (+$40–$100)"><span>Pet Hair Removal <em>+$40–$100</em></span></label>
+              <label class="bk-addon"><input type="checkbox" name="addon" value="Odor Elimination (+$50)"><span>Odor Elimination <em>+$50</em></span></label>
+              <label class="bk-addon"><input type="checkbox" name="addon" value="Ceramic Spray Sealant (+$80)"><span>Ceramic Spray Sealant <em>+$80</em></span></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- STEP 4: CONTACT + PHOTOS -->
+        <div class="bk-step" data-bk-step="4" hidden>
+          <h2 class="bk-step-title">Your details</h2>
+          <div class="bk-form-grid">
+            <div class="bk-field" data-bk-field="name">
+              <label for="bkName">Full name <span class="bk-req">*</span></label>
+              <input type="text" id="bkName" name="name" placeholder="Jane Smith" required autocomplete="name">
+            </div>
+            <div class="bk-field" data-bk-field="phone">
+              <label for="bkPhone">Phone number <span class="bk-req">*</span></label>
+              <input type="tel" id="bkPhone" name="phone" placeholder="(250) 555-0000" required autocomplete="tel">
+            </div>
+            <div class="bk-field bk-field--full" data-bk-field="email">
+              <label for="bkEmail">Email address <span class="bk-req">*</span></label>
+              <input type="email" id="bkEmail" name="email" placeholder="jane@example.com" required autocomplete="email">
+            </div>
+            <div class="bk-field bk-field--full" data-bk-field="address">
+              <label for="bkAddress">Service address <span class="bk-req">*</span> <span class="bk-hint">— where we come to you</span></label>
+              <input type="text" id="bkAddress" name="address" placeholder="123 Main St, Kelowna, BC" required autocomplete="street-address">
+            </div>
+          </div>
+          <div class="bk-photos">
+            <p class="bk-photos-title">Vehicle photos <span>(optional, up to 4)</span></p>
+            <p class="bk-photos-sub">Show us the current condition — helps us prepare and give an accurate quote.</p>
+            <div class="bk-upload-zone" data-bk-upload-zone role="button" tabindex="0">
+              <span class="bk-upload-icon" aria-hidden="true">📷</span>
+              <strong>Tap to add photos</strong>
+              <small>JPG, PNG or HEIC · max 5 MB each</small>
+              <input type="file" id="bkPhotoInput" accept="image/*" multiple data-bk-photo-input aria-label="Choose photos" style="position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%">
+            </div>
+            <div class="bk-photo-previews" data-bk-photo-previews></div>
+          </div>
+          <div class="bk-field bk-field--full bk-notes-field">
+            <label for="bkNotes">Notes / special requests <span class="bk-hint">(optional)</span></label>
+            <textarea id="bkNotes" name="notes" rows="3" placeholder="e.g. heavy pet hair, stain on seat, please avoid strong scents…"></textarea>
+          </div>
+        </div>
+
+        <!-- STEP 5: REVIEW -->
+        <div class="bk-step" data-bk-step="5" hidden>
+          <h2 class="bk-step-title">Review your booking</h2>
+          <div class="bk-review" data-bk-review></div>
+          <p class="bk-disclaimer">* Estimates only — final price confirmed on-site. No payment taken online.</p>
+          <div class="bk-error-msg" data-bk-error hidden></div>
+        </div>
+
+        <!-- STEP 6: SUCCESS -->
+        <div class="bk-step" data-bk-step="6" hidden>
+          <div class="bk-success">
+            <span class="bk-success-icon" aria-hidden="true">⭐</span>
+            <h2>Request Sent!</h2>
+            <p>We've received your booking request and will confirm within a few hours. You'll get a confirmation email once approved.</p>
+            <p class="bk-success-tel">Questions? Text us at <a href="#book" data-open-booking>604-728-3247</a></p>
+          </div>
+        </div>
+
+      </div><!-- /.bk-body -->
+
+      <div class="bk-footer" data-bk-footer>
+        <button class="bk-btn-back" data-bk-back type="button">← Back</button>
+        <button class="bk-btn-next angle-button" data-bk-next type="button">Continue →</button>
+        <button class="bk-btn-submit angle-button" data-bk-submit type="button" hidden>Send Booking Request</button>
+      </div>
+
+    </div><!-- /.bk-panel -->
+  </div><!-- /.bk-modal -->
+
 </body>
 </html>
