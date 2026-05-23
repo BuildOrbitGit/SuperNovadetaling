@@ -314,7 +314,7 @@ h3 {
   background-image:
     linear-gradient(90deg, rgba(2, 7, 19, 0.82) 0%, rgba(5, 14, 29, 0.58) 42%, rgba(7, 18, 35, 0.26) 72%),
     linear-gradient(0deg, rgba(2, 7, 19, 0.78), transparent 34%),
-    url("assets/images/hero-supercars-mountain.png");
+    url("hero-supercars-mountain.png");
   background-position: center;
   background-size: cover;
   filter: brightness(1.18) contrast(1.08) saturate(1.08);
@@ -651,18 +651,18 @@ h3 {
 
 .comparison-story {
   position: relative;
-  min-height: 92svh;
-  margin-bottom: 18px;
-}
-
-.comparison-story:last-child {
+  padding: 56px 0;
   margin-bottom: 0;
 }
 
+.comparison-story:last-child {
+  padding-bottom: 0;
+}
+
 .comparison-pin {
-  position: sticky;
-  top: 82px;
-  min-height: calc(100svh - 142px);
+  position: relative;
+  top: auto;
+  min-height: auto;
   padding: 8px 0 22px;
   display: grid;
   grid-template-columns: minmax(240px, 0.42fr) minmax(0, 1fr);
@@ -708,26 +708,46 @@ h3 {
 
 .after-reveal {
   overflow: hidden;
-  clip-path: inset(0 0 100% 0);
-}
-
-.reverse-reveal .after-reveal {
-  clip-path: inset(100% 0 0 0);
+  clip-path: inset(0 100% 0 0);
 }
 
 .slider-line {
   position: absolute;
-  top: 0%;
-  right: 0;
-  left: 0;
-  width: 100%;
-  height: 2px;
-  background: var(--cyan);
-  box-shadow: 0 0 18px rgba(127, 183, 216, 0.5);
+  top: 0;
+  left: 0%;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(180deg, transparent 0%, var(--cyan) 18%, rgba(200,240,255,0.95) 50%, var(--cyan) 82%, transparent 100%);
+  box-shadow: 0 0 14px 5px rgba(8, 217, 255, 0.55), 0 0 44px 14px rgba(8, 217, 255, 0.22);
+  transform: translateX(-50%);
+  z-index: 3;
 }
 
-.reverse-reveal .slider-line {
-  top: 100%;
+.slider-line::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -18px;
+  width: 36px;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(150,220,255,0.13), rgba(255,255,255,0.07), rgba(150,220,255,0.13), transparent);
+  filter: blur(9px);
+  pointer-events: none;
+}
+
+@keyframes shine-sweep {
+  from { opacity: 0.9; transform: translateX(-120%) skewX(-14deg); }
+  to   { opacity: 0;   transform: translateX(140%) skewX(-14deg); }
+}
+
+.comparison-frame.wipe-done::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 30%, rgba(255,255,255,0.08) 50%, transparent 70%);
+  animation: shine-sweep 0.75s ease-out forwards;
+  pointer-events: none;
+  z-index: 4;
 }
 
 .image-label {
@@ -1210,15 +1230,9 @@ h3 {
     grid-template-columns: 1fr;
   }
 
-  .comparison-pin {
-    min-height: auto;
-    position: relative;
-    top: auto;
-  }
-
   .comparison-story {
-    min-height: 88svh;
-    margin-bottom: 26px;
+    padding: 36px 0;
+    margin-bottom: 0;
   }
 
   .service-grid,

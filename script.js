@@ -169,50 +169,53 @@ function setupGsapAnimations() {
   });
 }
 
-function setupComparisonScroll() {
-  const stories = Array.from(document.querySelectorAll("[data-comparison-story]"));
-  if (!stories.length) return;
+function setupComparisonWipe() {
+  const frames = Array.from(document.querySelectorAll("[data-comparison]"));
+  if (!frames.length) return;
 
-  const clamp = (value) => Math.min(1, Math.max(0, value));
+  const DURATION = 1.5;
 
-  const updateComparisons = () => {
-    const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-    const startLine = viewportHeight * 0.78;
-    const endLine = viewportHeight * 0.18;
-    const travel = startLine - endLine;
+  const playWipe = (frame) => {
+    const afterReveal = frame.querySelector("[data-after-reveal]");
+    const sliderLine = frame.querySelector("[data-slider-line]");
+    if (!afterReveal || !sliderLine) return;
 
-    stories.forEach((story) => {
-      const isBottomUp = story.dataset.direction === "bottom-up";
-      const afterReveal = story.querySelector("[data-after-reveal]");
-      const sliderLine = story.querySelector("[data-slider-line]");
-      if (!afterReveal || !sliderLine) return;
+    frame.classList.remove("wipe-done");
 
-      const rect = story.getBoundingClientRect();
-      const progress = clamp((startLine - rect.top) / travel);
-      const hidden = 100 - progress * 100;
-      const lineTop = isBottomUp ? 100 - progress * 100 : progress * 100;
+    if (window.gsap) gsap.killTweensOf([afterReveal, sliderLine]);
+    afterReveal.style.clipPath = "inset(0 100% 0 0)";
+    sliderLine.style.left = "0%";
 
-      afterReveal.style.clipPath = isBottomUp
-        ? `inset(${hidden}% 0 0 0)`
-        : `inset(0 0 ${hidden}% 0)`;
-      sliderLine.style.top = `${lineTop}%`;
-    });
+    if (window.gsap && !prefersReducedMotion) {
+      const tl = gsap.timeline({ onComplete: () => frame.classList.add("wipe-done") });
+      tl.to(sliderLine,   { left: "100%",                  duration: DURATION, ease: "power2.inOut" }, 0)
+        .to(afterReveal,  { clipPath: "inset(0 0% 0 0)",   duration: DURATION, ease: "power2.inOut" }, 0);
+    } else {
+      afterReveal.style.transition = `clip-path ${DURATION}s ease-in-out`;
+      sliderLine.style.transition  = `left ${DURATION}s ease-in-out`;
+      requestAnimationFrame(() => {
+        afterReveal.style.clipPath = "inset(0 0% 0 0)";
+        sliderLine.style.left = "100%";
+      });
+      setTimeout(() => frame.classList.add("wipe-done"), DURATION * 1000 + 100);
+    }
   };
 
-  let ticking = false;
-  const requestUpdate = () => {
-    if (ticking) return;
-    ticking = true;
-    window.requestAnimationFrame(() => {
-      updateComparisons();
-      ticking = false;
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => playWipe(entry.target), 250);
+        observer.unobserve(entry.target);
+      }
     });
-  };
+  }, { threshold: 0.45 });
 
-  updateComparisons();
-  window.addEventListener("scroll", requestUpdate, { passive: true });
-  window.addEventListener("resize", requestUpdate);
-  window.addEventListener("load", updateComparisons);
+  frames.forEach((frame) => {
+    observer.observe(frame);
+    frame.style.cursor = "pointer";
+    frame.title = "Click to replay";
+    frame.addEventListener("click", () => playWipe(frame));
+  });
 }
 
 function setupTiltCards() {
@@ -277,7 +280,7 @@ document.addEventListener("DOMContentLoaded", () => {
   document.documentElement.style.setProperty("--business-name", `"${SITE_CONFIG.businessName}"`);
   setupNavigation();
   setupGsapAnimations();
-  setupComparisonScroll();
+  setupComparisonWipe();
   setupTiltCards();
   setupCarousel();
 });
